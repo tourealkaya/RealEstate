@@ -61,11 +61,7 @@ flutter:
   # the material Icons class.
  # uses-material-design: true
   assets:
-    - assets/maison1.jpg
-    - assets/maison2.jpg
-    - assets/maison3.jpg
-    - assets/appartement1.jpg
-    - assets/appartement2.jpg
+    - assets/
 
   # To add assets to your application, add an assets section, like this:
   # assets:

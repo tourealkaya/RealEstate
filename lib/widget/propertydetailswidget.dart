@@ -68,11 +68,14 @@ class PropertyDetailsWidget extends StatelessWidget {
 }
 */
 
+/*
 
+ */
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:realestate/data/property.dart';
+import 'dart:io';
 
 class PropertyDetailsWidget extends StatefulWidget {
   const PropertyDetailsWidget({Key? key}) : super(key: key);
@@ -90,14 +93,14 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
 
     return Scaffold(
       appBar: AppBar(
-        //title: Text("Property ${property.propertyId}"),
-       /* leading: IconButton(
+        title: Text("Property ${property.propertyId}"),
+        leading: IconButton(
           icon: Icon(Icons.arrow_back_ios_new),
           iconSize: 30.0,
           onPressed: () {
             Navigator.pop(context);
           },
-        ),*/
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -150,8 +153,10 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
             ),
             GestureDetector(
               onTap: _pickImage,
-              child: Image.asset(
+              child: Image.network(
                 property.imageUrl,
+                width: 120,
+                height: 120,
               ),
             ),
           ],
@@ -172,7 +177,5 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
       });
     }
   }
-
-
 
 }

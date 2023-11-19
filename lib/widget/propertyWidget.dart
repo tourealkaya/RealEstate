@@ -23,13 +23,11 @@ class _PropertyWidgetState extends State<PropertyWidget> {
         padding: const EdgeInsets.all(16.0),
         child: Row(
           children: [
-            Container(
-              width: 120,
-              height: 120,
-              child: Image.asset(
+
+              Image.network(
                 widget.property.imageUrl,
               ),
-            ),
+
             const SizedBox(width: 16),
             Expanded(
               child: Column(
