@@ -1,76 +1,4 @@
-/*import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:realestate/data/property.dart';
-import 'package:image_picker/image_picker.dart';
-
-class PropertyDetailsWidget extends StatelessWidget {
-  const PropertyDetailsWidget({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final property = ModalRoute.of(context)!.settings.arguments as Property;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Property ${property.propertyId}"),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFormField(
-              initialValue: "${property.propertyId}",
-              decoration: const InputDecoration(labelText: "Property ID"),
-            ),
-            const SizedBox(height: 16.0),
-            TextFormField(
-              initialValue: property.propertType,
-              onChanged: (text) {
-                property.propertType = text;
-              },
-              decoration: const InputDecoration(labelText: "Type"),
-            ),
-            TextFormField(
-              initialValue: "${property.numberOfRoom}",
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              onChanged: (text) {
-                try {
-                  property.numberOfRoom = int.parse(text);
-                } on FormatException {
-                  //exception
-                }
-              },
-              decoration: const InputDecoration(labelText: "Room"),
-            ),
-            TextFormField(
-              initialValue: "${property.price}",
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              onChanged: (text) {
-                try {
-                  property.price = int.parse(text);
-                } on FormatException {
-                  //exception
-                }
-              },
-              decoration: const InputDecoration(labelText: "Price"),
-            ),
-              Image.asset(
-                property.imageUrl,
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-*/
-
-/*
-
- */
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
@@ -98,7 +26,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
           icon: Icon(Icons.arrow_back_ios_new),
           iconSize: 30.0,
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context, property); // Passer la propriété modifiée en arrière
           },
         ),
       ),
@@ -112,11 +40,17 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
               decoration: const InputDecoration(labelText: "Property ID"),
             ),
             const SizedBox(height: 16.0),
-            TextFormField(
-              initialValue: property.propertType,
-              onChanged: (text) {
+            DropdownButtonFormField<String>(
+              value: property.propertType,
+              items: ["House", "Apartment"]
+                  .map((type) => DropdownMenuItem<String>(
+                value: type,
+                child: Text(type),
+              ))
+                  .toList(),
+              onChanged: (selectedType) {
                 setState(() {
-                  property.propertType = text;
+                  property.propertType = selectedType!;
                 });
               },
               decoration: const InputDecoration(labelText: "Type"),
@@ -130,7 +64,7 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                   try {
                     property.numberOfRoom = int.parse(text);
                   } on FormatException {
-                    //exception
+                    // Exception
                   }
                 });
               },
@@ -145,24 +79,48 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
                   try {
                     property.price = int.parse(text);
                   } on FormatException {
-                    //exception
+                    // Exception
                   }
                 });
               },
               decoration: const InputDecoration(labelText: "Price"),
             ),
             GestureDetector(
-              onTap: _pickImage,
-              child: Image.network(
-                property.imageUrl,
-                width: 120,
-                height: 120,
-              ),
+              onTap: () async {
+                await _pickImage();
+              },
+              child: buildImage(), // Utilisation de la fonction buildImage
             ),
           ],
         ),
       ),
     );
+  }
+
+  Widget buildImage() {
+    if (kIsWeb) {
+      // Sur le navigateur, utilisation Image.network
+      return Image.network(
+        property.imageUrl,
+        width: 120,
+        height: 120,
+      );
+    } else {
+      // Sur mobile ou desktop, utilisation Image.asset ou Image.file
+      if (property.imageUrl.startsWith('assets/')) {
+        return Image.asset(
+          property.imageUrl,
+          width: 120,
+          height: 120,
+        );
+      } else {
+        return Image.file(
+          File(property.imageUrl),
+          width: 120,
+          height: 120,
+        );
+      }
+    }
   }
 
   Future<void> _pickImage() async {
@@ -177,5 +135,4 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
       });
     }
   }
-
 }
