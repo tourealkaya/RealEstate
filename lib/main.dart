@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:realestate/data/property.dart';
 import 'package:realestate/repository/real_estate_repository.dart';
 import 'package:realestate/repository/real_estate_repository_dummy_impl.dart';
 import 'package:realestate/widget/realestateWidget.dart';

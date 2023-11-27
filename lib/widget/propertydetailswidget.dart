@@ -26,72 +26,69 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
           icon: Icon(Icons.arrow_back_ios_new),
           iconSize: 30.0,
           onPressed: () {
-            Navigator.pop(context, property); // Passer la propriété modifiée en arrière
+            Navigator.pop(context, property);
           },
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFormField(
-              initialValue: "${property.propertyId}",
-              decoration: const InputDecoration(labelText: "Property ID"),
-            ),
-            const SizedBox(height: 16.0),
-            DropdownButtonFormField<String>(
-              value: property.propertType,
-              items: ["House", "Apartment"]
-                  .map((type) => DropdownMenuItem<String>(
-                value: type,
-                child: Text(type),
-              ))
-                  .toList(),
-              onChanged: (selectedType) {
-                setState(() {
-                  property.propertType = selectedType!;
-                });
-              },
-              decoration: const InputDecoration(labelText: "Type"),
-            ),
-            TextFormField(
-              initialValue: "${property.numberOfRoom}",
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              onChanged: (text) {
-                setState(() {
-                  try {
-                    property.numberOfRoom = int.parse(text);
-                  } on FormatException {
-                    // Exception
-                  }
-                });
-              },
-              decoration: const InputDecoration(labelText: "Room"),
-            ),
-            TextFormField(
-              initialValue: "${property.price}",
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              onChanged: (text) {
-                setState(() {
-                  try {
-                    property.price = int.parse(text);
-                  } on FormatException {
-                    // Exception
-                  }
-                });
-              },
-              decoration: const InputDecoration(labelText: "Price"),
-            ),
-            GestureDetector(
-              onTap: () async {
-                await _pickImage();
-              },
-              child: buildImage(), // Utilisation de la fonction buildImage
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DropdownButtonFormField<String>(
+                value: property.propertType,
+                items: ["House", "Apartment"]
+                    .map((type) => DropdownMenuItem<String>(
+                  value: type,
+                  child: Text(type),
+                ))
+                    .toList(),
+                onChanged: (selectedType) {
+                  setState(() {
+                    property.propertType = selectedType!;
+                  });
+                },
+                decoration: const InputDecoration(labelText: "Type"),
+              ),
+              TextFormField(
+                initialValue: "${property.numberOfRoom}",
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                onChanged: (text) {
+                  setState(() {
+                    try {
+                      property.numberOfRoom = int.parse(text);
+                    } on FormatException {
+                      // Exception
+                    }
+                  });
+                },
+                decoration: const InputDecoration(labelText: "Room"),
+              ),
+              TextFormField(
+                initialValue: "${property.price}",
+                keyboardType: TextInputType.number,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                onChanged: (text) {
+                  setState(() {
+                    try {
+                      property.price = int.parse(text);
+                    } on FormatException {
+                      // Exception
+                    }
+                  });
+                },
+                decoration: const InputDecoration(labelText: "Price"),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  await _pickImage();
+                },
+                child: buildImage(),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -99,25 +96,20 @@ class _PropertyDetailsWidgetState extends State<PropertyDetailsWidget> {
 
   Widget buildImage() {
     if (kIsWeb) {
-      // Sur le navigateur, utilisation Image.network
       return Image.network(
         property.imageUrl,
-        width: 120,
-        height: 120,
+        height: 300,
       );
     } else {
-      // Sur mobile ou desktop, utilisation Image.asset ou Image.file
       if (property.imageUrl.startsWith('assets/')) {
         return Image.asset(
           property.imageUrl,
-          width: 120,
-          height: 120,
+          height: 300,
         );
       } else {
         return Image.file(
           File(property.imageUrl),
-          width: 120,
-          height: 120,
+          height: 300,
         );
       }
     }

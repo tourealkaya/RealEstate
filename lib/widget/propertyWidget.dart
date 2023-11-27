@@ -76,7 +76,7 @@ class _PropertyWidgetState extends State<PropertyWidget> {
                 children: [
                   Text("Property ${widget.property.propertyId}"),
                   Text("${widget.property.propertType}  ${widget.property.numberOfRoom} rooms"),
-                  Text("${widget.property.price}"),
+                  Text("\$ ${widget.property.price}"),
                 ],
               ),
             ),
